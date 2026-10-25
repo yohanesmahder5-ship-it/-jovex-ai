@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JOVEX AI — Create Beyond Reality</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #09090b;
+      color: #f5f5f5;
+      font-family: Arial, sans-serif;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 6%;
+      border-bottom: 1px solid #25252b;
+    }
+    .logo { font-size: 25px; font-weight: 900; letter-spacing: 3px; }
+    .logo span { color: #ff304f; }
+    .tag { color: #999; font-size: 12px; }
+    main { max-width: 850px; margin: 55px auto; padding: 20px; }
+    h1 { font-size: clamp(32px, 7vw, 58px); margin-bottom: 12px; }
+    h1 span { color: #ff304f; }
+    .intro { color: #a1a1aa; line-height: 1.6; }
+    .panel {
+      margin-top: 30px;
+      padding: 22px;
+      background: #131316;
+      border: 1px solid #303036;
+      border-radius: 18px;
+    }
+    label { display: block; margin: 18px 0 10px; font-weight: bold; }
+    textarea, select, input[type="file"] {
+      width: 100%;
+      background: #09090b;
+      border: 1px solid #36363d;
+      border-radius: 10px;
+      padding: 13px;
+      color: white;
+      font: inherit;
+    }
+    textarea { min-height: 120px; resize: vertical; }
+    .settings {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    button {
+      width: 100%;
+      margin-top: 22px;
+      border: 0;
+      border-radius: 10px;
+      padding: 16px;
+      background: #ff304f;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:active { opacity: .8; }
+    #preview {
+      display: none;
+      margin-top: 22px;
+      padding: 18px;
+      border: 1px solid #36363d;
+      border-radius: 12px;
+      overflow-wrap: anywhere;
+    }
+    #preview img {
+      display: block;
+      max-width: 100%;
+      max-height: 320px;
+      margin-top: 15px;
+      border-radius: 10px;
+    }
+    .note { color: #a1a1aa; font-size: 12px; line-height: 1.6; }
+    footer { text-align: center; padding: 25px; color: #777; font-size: 12px; }
+    @media(max-width: 500px) {
+      .settings { grid-template-columns: 1fr; }
+      main { margin-top: 25px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">JØN<span>VEX</span></div>
+    <div class="tag">AI CREATIVE STUDIO</div>
+  </header>
+
+  <main>
+    <h1>Create beyond <span>reality.</span></h1>
+    <p class="intro">
+      Turn your imagination into cinematic visual stories.
+      Your creative workspace starts here.
+    </p>
+
+    <section class="panel">
+      <label for="prompt">Describe your video</label>
+      <textarea id="prompt" placeholder="A cinematic basketball player jumping toward the hoop at night, dramatic lighting, slow motion..."></textarea>
+
+      <label for="image">Starting image (optional)</label>
+      <input id="image" type="file" accept="image/*">
+
+      <div class="settings">
+        <div>
+          <label for="mode">Creation mode</label>
+          <select id="mode">
+            <option value="text">Text to video</option>
+            <option value="image">Image to video</option>
+          </select>
+        </div>
+        <div>
+          <label for="ratio">Aspect ratio</label>
+          <select id="ratio">
+            <option value="9:16">9:16 — Shorts / TikTok</option>
+            <option value="16:9">16:9 — YouTube</option>
+            <option value="1:1">1:1 — Square</option>
+          </select>
+        </div>
+      </div>
+
+      <button id="create">Prepare my creation</button>
+
+      <div id="preview" aria-live="polite"></div>
+      <p class="note">
+        Prototype version: this page prepares your prompt and image
+        locally. Real AI video generation is not connected yet.
+      </p>
+    </section>
+  </main>
+
+  <footer>JOVEX AI · Built from imagination</footer>
+
+  <script>
+    const promptBox = document.getElementById("prompt");
+    const imageInput = document.getElementById("image");
+    const mode = document.getElementById("mode");
+    const ratio = document.getElementById("ratio");
+    const preview = document.getElementById("preview");
+
+    document.getElementById("create").addEventListener("click", () => {
+      const prompt = promptBox.value.trim();
+      const file = imageInput.files[0];
+
+      if (!prompt) {
+        alert("Please describe the video you want to create.");
+        promptBox.focus();
+        return;
+      }
+
+      if (mode.value === "image" && !file) {
+        alert("Please upload a starting image for image-to-video mode.");
+        return;
+      }
+
+      preview.style.display = "block";
+      preview.replaceChildren();
+
+      const title = document.createElement("h3");
+      title.textContent = "Your creation brief is ready";
+      preview.appendChild(title);
+
+      const description = document.createElement("p");
+      description.textContent = "Prompt: " + prompt;
+      preview.appendChild(description);
+
+      const details = document.createElement("p");
+      details.textContent = "Mode: " +
+        (mode.value === "image" ? "Image to video" : "Text to video") +
+        " · Aspect ratio: " + ratio.value;
+      preview.appendChild(details);
+
+      if (file) {
+        const img = document.createElement("img");
+        img.alt = "Your uploaded starting image";
+        img.src = URL.createObjectURL(file);
+        preview.appendChild(img);
+      }
+
+      const notice = document.createElement("p");
+      notice.className = "note";
+      notice.textContent =
+        "This is a local prototype. No AI video has been generated yet.";
+      preview.appendChild(notice);
+
+      preview.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  </script>
+</body>
+</html>
