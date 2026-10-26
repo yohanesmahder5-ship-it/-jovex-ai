@@ -1,212 +1,145 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JOVEX AI — Create Beyond Reality</title>
+  <title>JOVEX AI — Video Studio</title>
   <style>
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      background: #09090b;
-      color: #f5f5f5;
+      background: #080910;
+      color: #f5f5fa;
       font-family: Arial, sans-serif;
     }
     header {
+      padding: 22px 18px;
+      border-bottom: 1px solid #242534;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 20px 6%;
-      border-bottom: 1px solid #25252b;
     }
-    .logo { font-size: 25px; font-weight: 900; letter-spacing: 3px; }
-    .logo span { color: #ff304f; }
-    .tag { color: #999; font-size: 12px; }
-    main { max-width: 850px; margin: 55px auto; padding: 20px; }
-    h1 { font-size: clamp(32px, 7vw, 58px); margin-bottom: 12px; }
-    h1 span { color: #ff304f; }
-    .intro { color: #a1a1aa; line-height: 1.6; }
+    .logo { font-size: 23px; font-weight: 900; letter-spacing: 2px; }
+    .logo span { color: #9a75ff; }
+    .tag { color: #aaa9bd; font-size: 12px; }
+    main { width: min(650px, 92%); margin: 45px auto; }
+    .eyebrow { color: #ad92ff; font-size: 12px; letter-spacing: 3px; }
+    h1 { font-size: clamp(32px, 8vw, 54px); margin: 14px 0; }
+    h1 span {
+      background: linear-gradient(90deg,#a98aff,#58d9ed);
+      color: transparent;
+      background-clip: text;
+    }
+    .intro { color: #aaa9bd; line-height: 1.6; }
     .panel {
-      margin-top: 30px;
-      padding: 22px;
-      background: #131316;
-      border: 1px solid #303036;
+      background: #11121d;
+      border: 1px solid #2a2a3c;
       border-radius: 18px;
+      padding: 20px;
+      margin-top: 28px;
     }
-    label { display: block; margin: 18px 0 10px; font-weight: bold; }
-    textarea, select, input[type="file"] {
+    label { display: block; font-size: 13px; margin: 16px 0 9px; }
+    textarea, select {
       width: 100%;
-      background: #09090b;
-      border: 1px solid #36363d;
+      color: white;
+      background: #090a12;
+      border: 1px solid #343449;
       border-radius: 10px;
       padding: 13px;
-      color: white;
       font: inherit;
     }
-    textarea { min-height: 120px; resize: vertical; }
-    .settings {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
+    textarea { min-height: 130px; resize: vertical; }
+    .options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     button {
       width: 100%;
-      margin-top: 22px;
+      margin-top: 20px;
+      padding: 15px;
       border: 0;
-      border-radius: 10px;
-      padding: 16px;
-      background: #ff304f;
+      border-radius: 11px;
+      background: linear-gradient(90deg,#8e65ff,#5d9cff);
       color: white;
       font-size: 16px;
       font-weight: bold;
-      cursor: pointer;
     }
-    button:active { opacity: .8; }
-    #preview {
-      display: none;
-      margin-top: 22px;
-      padding: 18px;
-      border: 1px solid #36363d;
-      border-radius: 12px;
+    button:disabled { opacity: .6; }
+    #status {
+      color: #c8c4df;
+      font-size: 14px;
+      line-height: 1.6;
       overflow-wrap: anywhere;
+      margin-top: 16px;
     }
-    #preview img {
-      display: block;
-      max-width: 100%;
-      max-height: 320px;
-      margin-top: 15px;
-      border-radius: 10px;
+    .preview {
+      min-height: 160px;
+      display: grid;
+      place-items: center;
+      border: 1px dashed #38384d;
+      border-radius: 12px;
+      margin-top: 18px;
+      padding: 12px;
+      color: #8f8ea7;
+      text-align: center;
     }
-    .note { color: #a1a1aa; font-size: 12px; line-height: 1.6; }
-    footer { text-align: center; padding: 25px; color: #777; font-size: 12px; }
-    @media(max-width: 500px) {
-      .settings { grid-template-columns: 1fr; }
-      main { margin-top: 25px; }
-    }
+    video { width: 100%; border-radius: 12px; }
+    footer { text-align: center; padding: 25px; color: #77778d; font-size: 12px; }
   </style>
 </head>
 <body>
   <header>
-    <div class="logo">JØN<span>VEX</span></div>
-    <div class="tag">AI CREATIVE STUDIO</div>
+    <div class="logo">JØVEX<span> AI</span></div>
+    <div class="tag">VIDEO STUDIO · BETA</div>
   </header>
 
   <main>
-    <h1>Create beyond <span>reality.</span></h1>
-    <p class="intro">
-      Turn your imagination into cinematic visual stories.
-      Your creative workspace starts here.
-    </p>
+    <div class="eyebrow">YOUR IDEAS, IN MOTION</div>
+    <h1>Create videos with <span>AI.</span></h1>
+    <p class="intro">Describe the scene you imagine. JOVEX AI is your creative video studio, built to turn prompts into moving images.</p>
 
     <section class="panel">
       <label for="prompt">Describe your video</label>
-      <textarea id="prompt" placeholder="A cinematic basketball player jumping toward the hoop at night, dramatic lighting, slow motion..."></textarea>
+      <textarea id="prompt" maxlength="1500" placeholder="A cinematic view of Addis Ababa at night, futuristic lights, smooth camera movement..."></textarea>
 
-      <label for="image">Starting image (optional)</label>
-      <input id="image" type="file" accept="image/*">
-
-      <div class="settings">
-        <div>
-          <label for="mode">Creation mode</label>
-          <select id="mode">
-            <option value="text">Text to video</option>
-            <option value="image">Image to video</option>
-          </select>
-        </div>
+      <div class="options">
         <div>
           <label for="ratio">Aspect ratio</label>
           <select id="ratio">
-            <option value="9:16">9:16 — Shorts / TikTok</option>
-            <option value="16:9">16:9 — YouTube</option>
-            <option value="1:1">1:1 — Square</option>
+            <option value="9:16">Portrait · 9:16</option>
+            <option value="16:9">Landscape · 16:9</option>
+            <option value="1:1">Square · 1:1</option>
+          </select>
+        </div>
+        <div>
+          <label for="duration">Duration</label>
+          <select id="duration">
+            <option value="5">5 seconds</option>
           </select>
         </div>
       </div>
 
-      <button id="create">Prepare my creation</button>
-
-      <div id="preview" aria-live="polite"></div>
-      <p class="note">
-        Prototype version: this page prepares your prompt and image
-        locally. Real AI video generation is not connected yet.
-      </p>
+      <button id="generate">Generate video</button>
+      <div id="status" role="status">Ready when you are. Video generation may require API credits.</div>
+      <div class="preview" id="preview">Your video result will appear here.</div>
     </section>
   </main>
 
-  <footer>JOVEX AI · Built from imagination</footer>
+  <footer>JØVEX AI · Built for imagination</footer>
 
   <script>
-    const promptBox = document.getElementById("prompt");
-    const imageInput = document.getElementById("image");
-    const mode = document.getElementById("mode");
-    const ratio = document.getElementById("ratio");
-    const preview = document.getElementById("preview");
+    const button = document.getElementById("generate");
+    const statusBox = document.getElementById("status");
 
-    document.getElementById("create").addEventListener("click", () => {
-      const prompt = promptBox.value.trim();
-      const file = imageInput.files[0];
+    button.addEventListener("click", async () => {
+      const prompt = document.getElementById("prompt").value.trim();
 
       if (!prompt) {
-        alert("Please describe the video you want to create.");
-        promptBox.focus();
+        statusBox.textContent = "Please describe your video first.";
         return;
       }
 
-      if (mode.value === "image" && !file) {
-        alert("Please upload a starting image for image-to-video mode.");
-        return;
-      }
-
-      preview.style.display = "block";
-      preview.replaceChildren();
-
-      const title = document.createElement("h3");
-      title.textContent = "Your creation brief is ready";
-      preview.appendChild(title);
-
-      const description = document.createElement("p");
-      description.textContent = "Prompt: " + prompt;
-      preview.appendChild(description);
-
-      const details = document.createElement("p");
-      details.textContent = "Mode: " +
-        (mode.value === "image" ? "Image to video" : "Text to video") +
-        " · Aspect ratio: " + ratio.value;
-      preview.appendChild(details);
-
-      if (file) {
-        const img = document.createElement("img");
-        img.alt = "Your uploaded starting image";
-        img.src = URL.createObjectURL(file);
-        preview.appendChild(img);
-      }
-
-      const notice = document.createElement("p");
-      notice.className = "note";
-      notice.textContent =
-        "This is a local prototype. No AI video has been generated yet.";
-      preview.appendChild(notice);
-
-      preview.scrollIntoView({ behavior: "smooth", block: "start" });
+      statusBox.textContent =
+        "The website design is ready, but video generation is not connected yet.";
     });
   </script>
 </body>
 </html>
-<script>
-const JOVEX_API = "https://jovex-api.yohanesmahder5.workers.dev/";
-
-async function testJovexConnection() {
-  try {
-    const response = await fetch(JOVEX_API, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: "A cinematic view of a futuristic city" })
-    });
-
-    const result = await response.json();
-    alert(JSON.stringify(result, null, 2));
-  } catch (error) {
-    alert("Connection failed. Please check your Worker.");
-  }
-}
-</script>
