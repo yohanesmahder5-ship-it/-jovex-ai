@@ -3,15 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JOVEX AI — Video Studio</title>
+  <title>JØVEX AI — Video Studio</title>
   <style>
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
       background: #080910;
       color: #f5f5fa;
       font-family: Arial, sans-serif;
     }
+
     header {
       padding: 22px 18px;
       border-bottom: 1px solid #242534;
@@ -20,18 +22,43 @@
       align-items: center;
       gap: 12px;
     }
-    .logo { font-size: 23px; font-weight: 900; letter-spacing: 2px; }
+
+    .logo {
+      font-size: 23px;
+      font-weight: 900;
+      letter-spacing: 2px;
+    }
+
     .logo span { color: #9a75ff; }
     .tag { color: #aaa9bd; font-size: 12px; }
-    main { width: min(650px, 92%); margin: 45px auto; }
-    .eyebrow { color: #ad92ff; font-size: 12px; letter-spacing: 3px; }
-    h1 { font-size: clamp(32px, 8vw, 54px); margin: 14px 0; }
+
+    main {
+      width: min(650px, 92%);
+      margin: 45px auto;
+    }
+
+    .eyebrow {
+      color: #ad92ff;
+      font-size: 12px;
+      letter-spacing: 3px;
+    }
+
+    h1 {
+      font-size: clamp(32px, 8vw, 54px);
+      margin: 14px 0;
+    }
+
     h1 span {
-      background: linear-gradient(90deg,#a98aff,#58d9ed);
+      background: linear-gradient(90deg, #a98aff, #58d9ed);
       color: transparent;
       background-clip: text;
     }
-    .intro { color: #aaa9bd; line-height: 1.6; }
+
+    .intro {
+      color: #aaa9bd;
+      line-height: 1.6;
+    }
+
     .panel {
       background: #11121d;
       border: 1px solid #2a2a3c;
@@ -39,8 +66,14 @@
       padding: 20px;
       margin-top: 28px;
     }
-    label { display: block; font-size: 13px; margin: 16px 0 9px; }
-    textarea, select {
+
+    label {
+      display: block;
+      font-size: 13px;
+      margin: 16px 0 9px;
+    }
+
+    textarea, select, input[type="file"] {
       width: 100%;
       color: white;
       background: #090a12;
@@ -49,21 +82,33 @@
       padding: 13px;
       font: inherit;
     }
-    textarea { min-height: 130px; resize: vertical; }
-    .options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    textarea {
+      min-height: 130px;
+      resize: vertical;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
     button {
       width: 100%;
       margin-top: 20px;
       padding: 15px;
       border: 0;
       border-radius: 11px;
-      background: linear-gradient(90deg,#8e65ff,#5d9cff);
+      background: linear-gradient(90deg, #8e65ff, #5d9cff);
       color: white;
       font-size: 16px;
       font-weight: bold;
       cursor: pointer;
     }
+
     button:disabled { opacity: .6; }
+
     #status {
       color: #c8c4df;
       font-size: 14px;
@@ -71,6 +116,7 @@
       overflow-wrap: anywhere;
       margin-top: 16px;
     }
+
     .preview {
       min-height: 160px;
       display: grid;
@@ -83,10 +129,27 @@
       text-align: center;
       overflow-wrap: anywhere;
     }
-    video { width: 100%; border-radius: 12px; }
-    footer { text-align: center; padding: 25px; color: #77778d; font-size: 12px; }
+
+    video, .image-preview {
+      width: 100%;
+      border-radius: 12px;
+    }
+
+    .hint {
+      color: #8f8ea7;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      color: #77778d;
+      font-size: 12px;
+    }
   </style>
 </head>
+
 <body>
   <header>
     <div class="logo">JØVEX<span> AI</span></div>
@@ -96,11 +159,38 @@
   <main>
     <div class="eyebrow">YOUR IDEAS, IN MOTION</div>
     <h1>Create videos with <span>AI.</span></h1>
-    <p class="intro">Describe the scene you imagine. JOVEX AI is your creative video studio, built to turn prompts into moving images.</p>
+    <p class="intro">
+      Turn your imagination into motion. Describe a scene or upload
+      an image to begin creating with JØVEX AI.
+    </p>
 
     <section class="panel">
+      <label for="mode">Creation mode</label>
+      <select id="mode">
+        <option value="text">Text to Video</option>
+        <option value="image">Image to Video</option>
+      </select>
+
+      <div id="imageSection" hidden>
+        <label for="imageFile">Upload your image</label>
+        <input
+          id="imageFile"
+          type="file"
+          accept="image/png,image/jpeg,image/webp"
+        >
+        <p class="hint">
+          Choose a PNG, JPG, or WebP image. Image upload needs to be
+          connected to the video service before generation will work.
+        </p>
+        <div id="imagePreview"></div>
+      </div>
+
       <label for="prompt">Describe your video</label>
-      <textarea id="prompt" maxlength="1500" placeholder="A cinematic view of a futuristic city at night..."></textarea>
+      <textarea
+        id="prompt"
+        maxlength="1500"
+        placeholder="A cinematic view of a futuristic city at night..."
+      ></textarea>
 
       <div class="options">
         <div>
@@ -111,9 +201,11 @@
             <option value="1:1">Square · 1:1</option>
           </select>
         </div>
+
         <div>
           <label for="duration">Duration</label>
           <select id="duration">
+            <option value="5">5 seconds</option>
             <option value="10">10 seconds</option>
             <option value="15">15 seconds</option>
             <option value="20">20 seconds</option>
@@ -125,53 +217,169 @@
       </div>
 
       <button id="generate">Generate video</button>
-      <div id="status" role="status">Choose a duration and describe your video.</div>
-      <div class="preview" id="preview">Your video result will appear here.</div>
+
+      <div id="status" role="status" aria-live="polite">
+        Choose a creation mode and describe your video.
+      </div>
+
+      <div class="preview" id="preview">
+        Your video result will appear here.
+      </div>
     </section>
   </main>
 
   <footer>JØVEX AI · Built for imagination</footer>
 
   <script>
-    const API_URL = "https://jovex-api.yohanesmahder5.workers.dev/";
+    const API_URL =
+      "https://jovex-api.yohanesmahder5.workers.dev/";
+
+    const mode = document.getElementById("mode");
+    const imageSection = document.getElementById("imageSection");
+    const imageFile = document.getElementById("imageFile");
+    const imagePreview = document.getElementById("imagePreview");
+    const promptInput = document.getElementById("prompt");
+    const ratioInput = document.getElementById("ratio");
+    const durationInput = document.getElementById("duration");
     const button = document.getElementById("generate");
     const statusBox = document.getElementById("status");
     const preview = document.getElementById("preview");
 
-    button.addEventListener("click", async () => {
-      const prompt = document.getElementById("prompt").value.trim();
-      const ratio = document.getElementById("ratio").value;
-      const duration = Number(document.getElementById("duration").value);
+    let previewImageUrl = null;
 
-      if (!prompt) {
-        statusBox.textContent = "Please describe your video first.";
+    mode.addEventListener("change", () => {
+      const usingImage = mode.value === "image";
+      imageSection.hidden = !usingImage;
+
+      statusBox.textContent = usingImage
+        ? "Upload an image and describe how it should move."
+        : "Describe the video you want to create.";
+
+      if (usingImage) {
+        durationInput.value = "5";
+      }
+    });
+
+    imageFile.addEventListener("change", () => {
+      const file = imageFile.files[0];
+      imagePreview.replaceChildren();
+
+      if (previewImageUrl) {
+        URL.revokeObjectURL(previewImageUrl);
+        previewImageUrl = null;
+      }
+
+      if (!file) return;
+
+      const allowedTypes = [
+        "image/png",
+        "image/jpeg",
+        "image/webp"
+      ];
+
+      if (!allowedTypes.includes(file.type)) {
+        imageFile.value = "";
+        statusBox.textContent =
+          "Please choose a PNG, JPG, or WebP image.";
         return;
       }
 
-      statusBox.textContent = "Sending request...";
-      preview.textContent = "Waiting for the video service...";
+      if (file.size > 10 * 1024 * 1024) {
+        imageFile.value = "";
+        statusBox.textContent =
+          "Please choose an image smaller than 10 MB.";
+        return;
+      }
+
+      previewImageUrl = URL.createObjectURL(file);
+
+      const img = document.createElement("img");
+      img.src = previewImageUrl;
+      img.alt = "Selected image preview";
+      img.className = "image-preview";
+      img.style.marginTop = "12px";
+      imagePreview.appendChild(img);
+
+      statusBox.textContent =
+        "Image selected. Describe the movement you want.";
+    });
+
+    button.addEventListener("click", async () => {
+      const prompt = promptInput.value.trim();
+      const selectedMode = mode.value;
+      const ratio = ratioInput.value;
+      const duration = Number(durationInput.value);
+      const file = imageFile.files[0];
+
+      if (!prompt) {
+        statusBox.textContent =
+          "Please describe the video first.";
+        return;
+      }
+
+      if (selectedMode === "image" && !file) {
+        statusBox.textContent =
+          "Please upload an image for Image to Video.";
+        return;
+      }
+
+      if (selectedMode === "image") {
+        statusBox.textContent =
+          "Image-to-video is not connected to the Cloudflare Worker yet. The image upload interface is ready, but the server must be updated to upload the image and create the video.";
+        return;
+      }
+
       button.disabled = true;
+      statusBox.textContent = "Sending request to JØVEX AI...";
+      preview.textContent = "Waiting for the video service...";
 
       try {
         const response = await fetch(API_URL, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ prompt, aspect_ratio: ratio, duration })
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            mode: "text",
+            prompt,
+            aspect_ratio: ratio,
+            duration
+          })
         });
 
         const result = await response.json();
 
         if (!response.ok) {
-          throw new Error(result.error || result.message || "The video service rejected the request.");
+          throw new Error(
+            result.error ||
+            result.message ||
+            "The video service rejected the request."
+          );
         }
 
-        statusBox.textContent =
-          "Request received. Response: " + JSON.stringify(result);
+        const videoUrl =
+          result.video_url ||
+          result.download_url ||
+          result.url ||
+          result.output_url;
 
-        preview.textContent =
-          "The service responded. Video status checking may still need to be connected.";
+        if (videoUrl) {
+          const video = document.createElement("video");
+          video.controls = true;
+          video.playsInline = true;
+          video.src = videoUrl;
+          preview.replaceChildren(video);
+          statusBox.textContent = "Video received.";
+        } else {
+          statusBox.textContent =
+            "The server accepted or answered the request, but did not return a direct video URL. The Worker still needs job-status polling and video URL handling.";
+
+          preview.textContent =
+            "No completed video URL was returned.";
+        }
       } catch (error) {
-        statusBox.textContent = "Could not generate the video: " + error.message;
+        statusBox.textContent =
+          "Could not generate the video: " + error.message;
         preview.textContent = "No video received.";
       } finally {
         button.disabled = false;
