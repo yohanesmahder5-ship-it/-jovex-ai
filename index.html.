@@ -192,3 +192,21 @@
   </script>
 </body>
 </html>
+<script>
+const JOVEX_API = "https://jovex-api.yohanesmahder5.workers.dev/";
+
+async function testJovexConnection() {
+  try {
+    const response = await fetch(JOVEX_API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt: "A cinematic view of a futuristic city" })
+    });
+
+    const result = await response.json();
+    alert(JSON.stringify(result, null, 2));
+  } catch (error) {
+    alert("Connection failed. Please check your Worker.");
+  }
+}
+</script>
