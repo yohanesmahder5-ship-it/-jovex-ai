@@ -18,6 +18,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 12px;
     }
     .logo { font-size: 23px; font-weight: 900; letter-spacing: 2px; }
     .logo span { color: #9a75ff; }
@@ -60,6 +61,7 @@
       color: white;
       font-size: 16px;
       font-weight: bold;
+      cursor: pointer;
     }
     button:disabled { opacity: .6; }
     #status {
@@ -79,6 +81,7 @@
       padding: 12px;
       color: #8f8ea7;
       text-align: center;
+      overflow-wrap: anywhere;
     }
     video { width: 100%; border-radius: 12px; }
     footer { text-align: center; padding: 25px; color: #77778d; font-size: 12px; }
@@ -97,7 +100,7 @@
 
     <section class="panel">
       <label for="prompt">Describe your video</label>
-      <textarea id="prompt" maxlength="1500" placeholder="A cinematic view of Addis Ababa at night, futuristic lights, smooth camera movement..."></textarea>
+      <textarea id="prompt" maxlength="1500" placeholder="A cinematic view of a futuristic city at night..."></textarea>
 
       <div class="options">
         <div>
@@ -110,11 +113,19 @@
         </div>
         <div>
           <label for="duration">Duration</label>
+          <select id="duration">
+            <option value="10">10 seconds</option>
+            <option value="15">15 seconds</option>
+            <option value="20">20 seconds</option>
+            <option value="30">30 seconds</option>
+            <option value="45">45 seconds</option>
+            <option value="60">60 seconds</option>
+          </select>
         </div>
       </div>
 
       <button id="generate">Generate video</button>
-      <div id="status" role="status">Ready when you are. Video generation may require API credits.</div>
+      <div id="status" role="status">Choose a duration and describe your video.</div>
       <div class="preview" id="preview">Your video result will appear here.</div>
     </section>
   </main>
@@ -122,28 +133,50 @@
   <footer>JØVEX AI · Built for imagination</footer>
 
   <script>
+    const API_URL = "https://jovex-api.yohanesmahder5.workers.dev/";
     const button = document.getElementById("generate");
     const statusBox = document.getElementById("status");
+    const preview = document.getElementById("preview");
 
     button.addEventListener("click", async () => {
       const prompt = document.getElementById("prompt").value.trim();
+      const ratio = document.getElementById("ratio").value;
+      const duration = Number(document.getElementById("duration").value);
 
       if (!prompt) {
         statusBox.textContent = "Please describe your video first.";
         return;
       }
 
-      statusBox.textContent =
-        "The website design is ready, but video generation is not connected yet.";
+      statusBox.textContent = "Sending request...";
+      preview.textContent = "Waiting for the video service...";
+      button.disabled = true;
+
+      try {
+        const response = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt, aspect_ratio: ratio, duration })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.error || result.message || "The video service rejected the request.");
+        }
+
+        statusBox.textContent =
+          "Request received. Response: " + JSON.stringify(result);
+
+        preview.textContent =
+          "The service responded. Video status checking may still need to be connected.";
+      } catch (error) {
+        statusBox.textContent = "Could not generate the video: " + error.message;
+        preview.textContent = "No video received.";
+      } finally {
+        button.disabled = false;
+      }
     });
   </script>
 </body>
 </html>
-<select id="duration">
-  <option value="10">10 seconds</option>
-  <option value="15">15 seconds</option>
-  <option value="20">20 seconds</option>
-  <option value="30">30 seconds</option>
-  <option value="45">45 seconds</option>
-  <option value="60">60 seconds</option>
-</select>
